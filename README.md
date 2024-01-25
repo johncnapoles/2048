@@ -5,10 +5,9 @@
 pip install pynput
 ```
 
-##### Plan:
+##### TODO:
 - Finish logic 
-    - shift tiles
-    - add score
+    - check valid moves
     - lose condition
 - Have a bot play it automatically
 - GUI

@@ -21,6 +21,11 @@ class Actions(Enum):
     RIGHT = keyboard.Key.right
     ESCAPE = keyboard.Key.esc
 
+class BoardMoves(Enum):
+    UP = "UP"
+    DOWN = "DOWN"
+    LEFT = "LEFT"
+    RIGHT = "RIGHT"
 class GameState(Enum):
     START_SCREEN = "START_SCREEN"
     PLAYING = "PLAYING"
