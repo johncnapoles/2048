@@ -1,25 +1,16 @@
 import random
 from constants import Tile
 import numpy as np
-
+from typing import Dict
 class Board:
     def __init__(self,rows=4,columns=4):
         self.rows = rows
         self.columns = columns
         self.board = np.zeros((rows,columns),dtype=int)
-        self.moveCount = 0
-        # self.occupiedTiles = set() 
         self.maxOccupiedTileCount = rows*columns
 
     def __str__(self) -> str:
         return f"{self.board}"
-
-    def isAllTilesOccupied(self) -> bool:        
-        for row in self.board:
-            for element in row:
-                if element == 0:
-                    return False
-        return True
 
     def generateNewTile(self) -> 'tuple[int,int]':
         #Keep Repeating
@@ -33,11 +24,93 @@ class Board:
                 #Return new tile coordinate
                 return (row_index,column_index) 
 
-    def triggerLoss(self) -> None:
+    def checkPossibleMoves(self) -> Dict[str,bool]:
         """
-        is this loss?
+        Check every tile in the board. 
+        FOR EACH move, check IF ANY tile can [move] or [merge] without index exceptions
+        Return an array of all the possible moves
         """
-        print(GameText.LOSE.value)
+        left_possible = False
+        right_possible = False
+        up_possible = False
+        down_possible = False
+
+        for row_index in range(self.rows):
+            for column_index in range(self.columns):
+                if self.board[row_index][column_index] == 0:
+                    continue
+                if not left_possible:
+                    if self.checkLeftForTile(row_index,column_index):
+                        left_possible = True
+                if not right_possible:
+                    if self.checkRightForTile(row_index,column_index):
+                        right_possible = True
+                if not up_possible:
+                    if self.checkUpForTile(row_index,column_index):
+                        up_possible = True
+                if not down_possible:
+                    if self.checkDownForTile(row_index,column_index):
+                        down_possible = True
+                if left_possible and right_possible and up_possible and down_possible:
+                    #Stop early. all is found
+                    break
+        
+        return {
+            'left': left_possible,
+            'right': right_possible,
+            'up': up_possible,
+            'down': down_possible
+        }
+
+    def checkLeftForTile(self,row_index,column_index) -> bool:
+        #edge case, literally
+        if column_index == 0:
+            return False
+        #normal case
+        tile_value = self.board[row_index][column_index]
+        other_tile_value = self.board[row_index][column_index-1]
+        if other_tile_value == 0 or other_tile_value == tile_value:
+            # print(f"left possible for {row_index}{column_index}")
+            return True
+        else:
+            # print(f"left NOT possible for {row_index}{column_index}")
+            return False
+
+    def checkRightForTile(self,row_index,column_index) -> bool:
+        #edge case
+        if column_index == self.columns-1:
+            return False
+        #normal case
+        tile_value = self.board[row_index][column_index]
+        other_tile_value = self.board[row_index][column_index+1]
+        if other_tile_value == 0 or other_tile_value == tile_value:
+            return True
+        else:
+            return False
+
+    def checkUpForTile(self,row_index,column_index) -> bool:
+        #edge case
+        if row_index == 0:
+            return False
+        #normal case
+        tile_value = self.board[row_index][column_index]
+        other_tile_value = self.board[row_index-1][column_index]
+        if other_tile_value == 0 or other_tile_value == tile_value:
+            return True
+        else:
+            return False
+
+    def checkDownForTile(self,row_index,column_index) -> bool:
+        #edge case
+        if row_index == self.rows-1:
+            return False
+        #normal case
+        tile_value = self.board[row_index][column_index]
+        other_tile_value = self.board[row_index+1][column_index]
+        if other_tile_value == 0 or other_tile_value == tile_value:
+            return True
+        else:
+            return False
 
     def leftMove(self) -> int:
         points_earned: int = 0
