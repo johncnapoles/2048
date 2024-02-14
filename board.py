@@ -3,7 +3,7 @@ from constants import Tile
 import numpy as np
 from typing import Dict
 class Board:
-    def __init__(self,rows=4,columns=4):
+    def __init__(self,rows=4,columns=4) -> None:
         self.rows = rows
         self.columns = columns
         self.board = np.zeros((rows,columns),dtype=int)
@@ -240,3 +240,6 @@ class Board:
                 if not flag_swap_made:
                     flag_row_finished = True
         return points_earned
+
+    def resetBoard(self) -> None:
+        self.board = np.zeros((self.rows,self.columns),dtype=int)

@@ -20,7 +20,9 @@ class Actions(Enum):
     LEFT = keyboard.Key.left
     RIGHT = keyboard.Key.right
     ESCAPE = keyboard.Key.esc
-
+    R = keyboard.KeyCode(char='r')
+    Y = keyboard.KeyCode(char='y')
+    N = keyboard.KeyCode(char='n')
 class BoardMoves(Enum):
     UP = "UP"
     DOWN = "DOWN"
@@ -30,6 +32,8 @@ class GameState(Enum):
     START_SCREEN = "START_SCREEN"
     PLAYING = "PLAYING"
     ENDED = "ENDED"
+    RETRYING = "RETRYING"
+    #PAUSE = "PAUSE"
 
 class GameText(Enum):
     INTRO = """
@@ -42,4 +46,13 @@ class GameText(Enum):
         """
     LOSE = """
         You died
+        """
+    RETRY = """
+        Retry? [(y)es/(n)o]
+        """ #TODO left right arrow to continue?
+    INVALIDRETRYINPUT = """
+        Invalid Input. Retry? [(y)es/(n)o]
+        """
+    RESUME = """
+        Resuming Game...
         """
